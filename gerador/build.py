@@ -3,7 +3,7 @@ rows = json.load(open(sys.argv[1])); out = sys.argv[2]
 # nome, ifood, canais, pendencias, grupo, foto
 PROD = [
  ("Milk Shake Oreo", 41.90, "Loja · iFood · 99", [], "Bebidas", "milkshake-oreo.jpg"),
- ("Frozen Maracomanga", 26.90, "Loja · iFood · 99", ["Salt Cream feito na loja (lote R$ 13,68 rende ~586 g); sal ainda sem preço e creme de leite 35% a confirmar"], "Bebidas", "frozen-maracomanga.jpg"),
+ ("Frozen Maracomanga", 28.90, "Loja · iFood · 99", ["Salt Cream feito na loja (lote R$ 13,68 rende ~586 g); sal ainda sem preço e creme de leite 35% a confirmar"], "Bebidas", "frozen-maracomanga.jpg"),
  ("Suco de Laranja com Morango", None, "Só na loja", ["Suco de laranja a R$ 13/L provisório — levantar preço real"], "Bebidas", "suco-laranja-morango.jpg"),
  ("Sorvete Pequeno", None, "Só na loja · 1 sabor", ["Servido no copo de café", "Sabor à escolha (Cookie com Nutella ou Red Velvet) — mesmo custo"], "Sorvetes", "sorvete.jpg"),
  ("Sorvete Grande", None, "Só na loja · 1 sabor", ["Pote de 200 g a R$ 0,32 provisório", "Confirmar se 150 g cabem no pote", "Sabor à escolha (Cookie com Nutella ou Red Velvet) — mesmo custo"], "Sorvetes", "sorvete.jpg"),
@@ -179,13 +179,14 @@ document.querySelectorAll('article.card').forEach(card=>{{
  function channel(ch,from){{const box=card.querySelector('[data-ch="'+ch+'"]');if(!box)return;const pi=box.querySelector('.preco'),ci=box.querySelector('.pct');
   let p=num(pi.value);const pl=num(card.querySelector('[data-ch="l"] .preco').value);
   const pc=v=>ch==='l'?cmv/v*100:(v-pl)/v*100;
-  if(from==='pct'){{const x=num(ci.value);if(ch==='l'?x>0:x<100){{p=ch==='l'?cmv/(x/100):pl/(1-x/100);pi.value=f2(p)}}}}
+  if(from==='loja'){{p=Math.ceil(pl/0.7-0.9)+0.9;pi.value=f2(p)}}
+  else if(from==='pct'){{const x=num(ci.value);if(ch==='l'?x>0:x<100){{p=ch==='l'?cmv/(x/100):pl/(1-x/100);pi.value=f2(p)}}}}
   else if(document.activeElement!==ci){{ci.value=p>0?f1(pc(p)):''}}
   const s=p*NET[ch]-cmv;box.querySelector('.sobra').textContent=brl(s);
   set(ch+'preco',brl(p));set(ch+'pct',p>0?f1(pc(p))+'%':'—');set(ch+'sobra',brl(s));}}
  function mark(){{let ed=false;card.querySelectorAll('input[data-orig]').forEach(i=>{{const c=num(i.value)!==num(i.dataset.orig);i.classList.toggle('chg',c);ed=ed||c}});
   card.querySelector('.tag.ed').hidden=!ed;card.querySelector('.reset').hidden=!ed;}}
- function all(from,ch){{calcCmv();['l','i'].forEach(c=>channel(c,c===ch?from:'preco'));mark()}}
+ function all(from,ch){{calcCmv();['l','i'].forEach(c=>channel(c,c===ch?from:(ch==='l'?'loja':'preco')));mark()}}
  card.querySelectorAll('tr.ing input').forEach(i=>i.addEventListener('input',()=>all('preco')));
  card.querySelectorAll('[data-ch]').forEach(box=>{{const ch=box.dataset.ch;
   box.querySelector('.preco').addEventListener('input',()=>all('preco',ch));
