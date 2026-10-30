@@ -7,8 +7,8 @@ PROD = [
  ("Suco de Laranja com Morango", None, "Só na loja", ["Suco de laranja a R$ 13/L provisório — levantar preço real"], "Bebidas", "suco-laranja-morango.jpg"),
  ("Sorvete Pequeno", None, "Só na loja · 1 sabor", ["Servido no copo de café", "Sabor à escolha (Cookie com Nutella ou Red Velvet) — mesmo custo"], "Sorvetes", "sorvete.jpg"),
  ("Sorvete Grande", None, "Só na loja · 1 sabor", ["Pote de 200 g a R$ 0,32 provisório", "Confirmar se 150 g cabem no pote", "Sabor à escolha (Cookie com Nutella ou Red Velvet) — mesmo custo"], "Sorvetes", "sorvete.jpg"),
- ("Cookie Sandwich Nutella", 32.90, "Loja · iFood · 99", [], "Cookies", None),
- ("Cookie Sandwich Red Velvet", 32.90, "Loja · iFood · 99", [], "Cookies", None),
+ ("Cookie Sandwich Nutella", 32.90, "Loja · iFood · 99", [], "Cookies", "cookie-sandwich-nutella.jpg"),
+ ("Cookie Sandwich Red Velvet", 32.90, "Loja · iFood · 99", [], "Cookies", "cookie-sandwich-red-velvet.jpg"),
  ("Cookie Fries P", None, "Só na loja", [], "Cookies", "cookie-fries.jpg"),
  ("Cookie Fries G", None, "Só na loja", ["Confirmar se a caixinha comporta o dobro de palitos"], "Cookies", "cookie-fries.jpg"),
 ]
