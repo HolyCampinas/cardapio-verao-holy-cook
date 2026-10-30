@@ -3,7 +3,7 @@ rows = json.load(open(sys.argv[1])); out = sys.argv[2]
 # nome, ifood, canais, pendencias, grupo, foto
 PROD = [
  ("Milk Shake Oreo", 41.90, "Loja · iFood · 99", [], "Bebidas", "milkshake-oreo.jpg"),
- ("Frozen Maracomanga", 26.90, "Loja · iFood · 99", ["Chantilly: R$ 25 rendendo 12 copos (1/12 un por copo). Confirmar se o preço é R$ 33 e o peso da embalagem — aí passa para 20 g por copo", "Preços de loja e iFood provisórios: com o chantilly o CMV passou de 42%"], "Bebidas", "frozen-maracomanga.jpg"),
+ ("Frozen Maracomanga", 26.90, "Loja · iFood · 99", ["Chantilly: 20 g por copo, R$ 33 a embalagem de 240 g (12 copos) — confirmar o peso na embalagem", "Preço de loja a rever: com o chantilly o CMV passou de 45%"], "Bebidas", "frozen-maracomanga.jpg"),
  ("Suco de Laranja com Morango", None, "Só na loja", ["Suco de laranja a R$ 13/L provisório — levantar preço real"], "Bebidas", "suco-laranja-morango.jpg"),
  ("Sorvete Pequeno", None, "Só na loja", ["Pote de 200 g a R$ 0,32 provisório"], "Sorvetes", "sorvete.jpg"),
  ("Sorvete Grande", None, "Só na loja", ["Pote de 200 g a R$ 0,32 provisório", "Confirmar se 180 ml cabem no pote"], "Sorvetes", "sorvete.jpg"),
@@ -12,7 +12,7 @@ PROD = [
  ("Cookie Fries P", None, "Só na loja", [], "Cookies", "cookie-fries.jpg"),
  ("Cookie Fries G", None, "Só na loja", ["Confirmar se a caixinha comporta o dobro de palitos"], "Cookies", "cookie-fries.jpg"),
 ]
-PEND_INS = {"Chantilly": "a confirmar", "Suco de Laranja Pasteurizado": "provisório", "Pote de Sorvete 200g": "provisório"}
+PEND_INS = { "Suco de Laranja Pasteurizado": "provisório", "Pote de Sorvete 200g": "provisório"}
 by = {}
 for r in rows:
     by.setdefault(r["nome"], {"preco": float(r["preco_venda"]), "cmv": float(r["cmv_unitario"]), "itens": []})["itens"].append(r)
