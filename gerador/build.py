@@ -6,7 +6,7 @@ PROD = [
  ("Frozen Maracomanga", 26.90, "Loja · iFood · 99", ["Salt Cream feito na loja (lote R$ 13,68 rende ~586 g); sal ainda sem preço e creme de leite 35% a confirmar"], "Bebidas", "frozen-maracomanga.jpg"),
  ("Suco de Laranja com Morango", None, "Só na loja", ["Suco de laranja a R$ 13/L provisório — levantar preço real"], "Bebidas", "suco-laranja-morango.jpg"),
  ("Sorvete Pequeno", None, "Só na loja · 1 sabor", ["Pote de 200 g a R$ 0,32 provisório", "Sabor à escolha (Cookie com Nutella ou Red Velvet) — mesmo custo"], "Sorvetes", "sorvete.jpg"),
- ("Sorvete Grande", None, "Só na loja · 1 sabor", ["Pote de 200 g a R$ 0,32 provisório", "Confirmar se 180 ml cabem no pote", "Sabor à escolha (Cookie com Nutella ou Red Velvet) — mesmo custo"], "Sorvetes", "sorvete.jpg"),
+ ("Sorvete Grande", None, "Só na loja · 1 sabor", ["Pote de 200 g a R$ 0,32 provisório", "Confirmar se 150 g cabem no pote", "Sabor à escolha (Cookie com Nutella ou Red Velvet) — mesmo custo"], "Sorvetes", "sorvete.jpg"),
  ("Cookie Sandwich Nutella", 32.90, "Loja · iFood · 99", [], "Cookies", None),
  ("Cookie Sandwich Red Velvet", 32.90, "Loja · iFood · 99", [], "Cookies", None),
  ("Cookie Fries P", None, "Só na loja", [], "Cookies", "cookie-fries.jpg"),
