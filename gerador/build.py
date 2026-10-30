@@ -3,8 +3,8 @@ rows = json.load(open(sys.argv[1])); out = sys.argv[2]
 # nome, ifood, canais, pendencias, grupo, foto
 PROD = [
  ("Milk Shake Oreo", 41.90, "Loja · iFood · 99", [], "Bebidas", "milkshake-oreo.jpg"),
- ("Frozen Maracomanga", 26.90, "Loja · iFood · 99", ["Chantilly sem quantidade e sem preço — o CMV ainda vai subir", "Preços de loja e iFood provisórios até fechar o chantilly"], "Bebidas", "frozen-maracomanga.jpg"),
- ("Suco de Laranja com Morango", None, "Só na loja", ["Suco de laranja a R$ 13/L provisório — levantar preço real", "Nome no cardápio em aberto (Smoothie de Morango com Laranja / Laramora)"], "Bebidas", "suco-laranja-morango.jpg"),
+ ("Frozen Maracomanga", 26.90, "Loja · iFood · 99", ["Chantilly: R$ 25 rendendo 12 copos (1/12 un por copo). Confirmar se o preço é R$ 33 e o peso da embalagem — aí passa para 20 g por copo", "Preços de loja e iFood provisórios: com o chantilly o CMV passou de 42%"], "Bebidas", "frozen-maracomanga.jpg"),
+ ("Suco de Laranja com Morango", None, "Só na loja", ["Suco de laranja a R$ 13/L provisório — levantar preço real"], "Bebidas", "suco-laranja-morango.jpg"),
  ("Sorvete Pequeno", None, "Só na loja", ["Pote de 200 g a R$ 0,32 provisório"], "Sorvetes", "sorvete.jpg"),
  ("Sorvete Grande", None, "Só na loja", ["Pote de 200 g a R$ 0,32 provisório", "Confirmar se 180 ml cabem no pote"], "Sorvetes", "sorvete.jpg"),
  ("Cookie Sandwich Nutella", 32.90, "Loja · iFood · 99", [], "Cookies", None),
@@ -12,7 +12,7 @@ PROD = [
  ("Cookie Fries P", None, "Só na loja", [], "Cookies", "cookie-fries.jpg"),
  ("Cookie Fries G", None, "Só na loja", ["Confirmar se a caixinha comporta o dobro de palitos"], "Cookies", "cookie-fries.jpg"),
 ]
-PEND_INS = {"Chantilly": "pendente", "Suco de Laranja Pasteurizado": "provisório", "Pote de Sorvete 200g": "provisório"}
+PEND_INS = {"Chantilly": "a confirmar", "Suco de Laranja Pasteurizado": "provisório", "Pote de Sorvete 200g": "provisório"}
 by = {}
 for r in rows:
     by.setdefault(r["nome"], {"preco": float(r["preco_venda"]), "cmv": float(r["cmv_unitario"]), "itens": []})["itens"].append(r)
@@ -46,7 +46,7 @@ for nome, ifood, canais, pend, grupo, f in PROD:
         qs = (f"{q:.4f}").rstrip("0").rstrip(".").replace(".", ",")
         linhas.append(f'<tr class="ing"><td>{html.escape(it["nome_insumo"])}{t}</td>'
                       f'<td class="num"><span class="inp"><input inputmode="decimal" class="q" value="{qs}" data-orig="{qs}" aria-label="quantidade"><i>{it["unidade"]}</i></span></td>'
-                      f'<td class="num"><span class="inp"><i>R$</i><input inputmode="decimal" class="u" value="{cus}" data-orig="{cus}" aria-label="preço unitário"></span></td>'
+                      f'<td class="num"><span class="inp"><i>R$</i><input inputmode="decimal" class="u" value="{cus}" data-orig="{cus}" aria-label="preço por {it["unidade"]}"></span></td>'
                       f'<td class="num tot">{brl(q*cu)}</td></tr>')
     def ch(key, label, preco, sob, cls):
         ps = f"{preco:.2f}".replace(".", ","); cs = f"{c/preco*100:.1f}".replace(".", ",")
@@ -63,7 +63,7 @@ for nome, ifood, canais, pend, grupo, f in PROD:
  {foto(f, nome, "foto")}
  <div class="body"><header><h3>{html.escape(nome)} <span class="tag ed" hidden>simulando</span></h3><span class="canais">{canais}<button class="reset" type="button" hidden>restaurar</button></span></header>
  <div class="kpis">{kp}</div>
- <div class="tw"><table><thead><tr><th>Insumo</th><th class="num">Qtd</th><th class="num">R$/un</th><th class="num">Total</th></tr></thead>
+ <div class="tw"><table><thead><tr><th>Insumo</th><th class="num">Qtd</th><th class="num">Preço por unidade de medida</th><th class="num">Total</th></tr></thead>
  <tbody>{"".join(linhas)}</tbody><tfoot><tr><th colspan="3">CMV total</th><th class="num" data-k="cmv">{brl(c)}</th></tr></tfoot></table></div>
  {pend_html}</div></article>''')
 
@@ -138,7 +138,7 @@ input.chg{{color:var(--accent);font-weight:700}}
 footer{{margin-top:40px;color:var(--muted);font-size:12.5px}}
 </style></head><body><main>
 <h1>Cardápio de Verão</h1>
-<p class="sub">Vendas de 06/11/2026 a fev/2027 · atualizado em 29/10/2026</p>
+<p class="sub">Vendas de 06/11/2026 a fev/2027 · atualizado em 30/10/2026</p>
 <div class="tabs" role="tablist">
  <button role="tab" id="t-fichas" aria-controls="fichas" aria-selected="true">Fichas técnicas</button>
  <button role="tab" id="t-resumo" aria-controls="resumo" aria-selected="false">Resumo</button>
@@ -154,7 +154,7 @@ footer{{margin-top:40px;color:var(--muted);font-size:12.5px}}
 <tr><th class="num gl gs">Preço</th><th class="num gl">CMV %</th><th class="num gl">Sobra</th><th class="num gi gs">Preço</th><th class="num gi">CMV %</th><th class="num gi">Sobra</th></tr></thead>
 <tbody>{"".join(resumo)}</tbody></table></div>
 </section>
-<footer>Holy Cook · fichas do sistema em 29/10/2026. Fotos da ficha técnica da franquia.</footer>
+<footer>Holy Cook · fichas do sistema em 30/10/2026. Fotos da ficha técnica da franquia.</footer>
 </main>
 <script>
 const tabs=[...document.querySelectorAll('[role=tab]')];
