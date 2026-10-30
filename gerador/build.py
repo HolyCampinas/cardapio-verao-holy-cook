@@ -3,7 +3,7 @@ rows = json.load(open(sys.argv[1])); out = sys.argv[2]
 # nome, ifood, canais, pendencias, grupo, foto
 PROD = [
  ("Milk Shake Oreo", 41.90, "Loja · iFood · 99", [], "Bebidas", "milkshake-oreo.jpg"),
- ("Frozen Maracomanga", 26.90, "Loja · iFood · 99", ["Chantilly: 20 g por copo, R$ 33 a embalagem de 240 g (12 copos) — confirmar o peso na embalagem", "Preço de loja a rever: com o chantilly o CMV passou de 45%"], "Bebidas", "frozen-maracomanga.jpg"),
+ ("Frozen Maracomanga", 26.90, "Loja · iFood · 99", ["Salt Cream feito na loja (lote R$ 13,68 rende ~586 g); sal ainda sem preço e creme de leite 35% a confirmar"], "Bebidas", "frozen-maracomanga.jpg"),
  ("Suco de Laranja com Morango", None, "Só na loja", ["Suco de laranja a R$ 13/L provisório — levantar preço real"], "Bebidas", "suco-laranja-morango.jpg"),
  ("Sorvete Pequeno", None, "Só na loja", ["Pote de 200 g a R$ 0,32 provisório"], "Sorvetes", "sorvete.jpg"),
  ("Sorvete Grande", None, "Só na loja", ["Pote de 200 g a R$ 0,32 provisório", "Confirmar se 180 ml cabem no pote"], "Sorvetes", "sorvete.jpg"),
