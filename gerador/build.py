@@ -32,7 +32,7 @@ for nome, ifood, canais, pend, grupo, f in PROD:
     tag = ' <span class="tag warn">pendente</span>' if any(("provisório" in x or "sem " in x) for x in pend) else ""
     if grupo != g0:
         resumo.append(f'<tr class="grp"><th colspan="8">{grupo}</th></tr>'); g0 = grupo
-    ifc = (f'<td class="num gi gs" data-r="ipreco">{brl(ifood)}</td><td class="num gi" data-r="ipct">{pct(c/ifood)}</td><td class="num gi" data-r="isobra">{brl(si(ifood,c))}</td>'
+    ifc = (f'<td class="num gi gs" data-r="ipreco">{brl(ifood)}</td><td class="num gi" data-r="ipct">{pct((ifood-p)/ifood)}</td><td class="num gi" data-r="isobra">{brl(si(ifood,c))}</td>'
            if ifood else '<td class="na gi gs" colspan="3">não vende</td>')
     resumo.append(f'<tr data-p="{slug(nome)}"><th scope="row"><a href="#{slug(nome)}" data-goto="fichas" class="prod">{foto(f, nome, "mini")}<span>{html.escape(nome)}{tag}</span></a></th>'
                   f'<td class="num gc gs"><b data-r="cmv">{brl(c)}</b></td><td class="num gl gs" data-r="lpreco">{brl(p)}</td><td class="num gl" data-r="lpct">{pct(c/p)}</td><td class="num gl" data-r="lsobra">{brl(sl(p,c))}</td>{ifc}</tr>')
@@ -49,10 +49,12 @@ for nome, ifood, canais, pend, grupo, f in PROD:
                       f'<td class="num"><span class="inp"><i>R$</i><input inputmode="decimal" class="u" value="{cus}" data-orig="{cus}" aria-label="preço por {it["unidade"]}"></span></td>'
                       f'<td class="num tot">{brl(q*cu)}</td></tr>')
     def ch(key, label, preco, sob, cls):
-        ps = f"{preco:.2f}".replace(".", ","); cs = f"{c/preco*100:.1f}".replace(".", ",")
+        ps = f"{preco:.2f}".replace(".", ",")
+        cs = f"{(c/preco if key == 'l' else (preco-p)/preco)*100:.1f}".replace(".", ",")
+        pl = "CMV" if key == "l" else "Diferença p/ loja"
         return (f'<div class="kpi {cls}" data-ch="{key}"><span>{label}</span>'
                 f'<label class="row">Preço <span class="inp big"><i>R$</i><input inputmode="decimal" class="preco" value="{ps}" data-orig="{ps}"></span></label>'
-                f'<label class="row">CMV <span class="inp"><input inputmode="decimal" class="pct" value="{cs}"><i>%</i></span></label>'
+                f'<label class="row">{pl} <span class="inp"><input inputmode="decimal" class="pct" value="{cs}"><i>%</i></span></label>'
                 f'<small>sobra <b class="sobra">{brl(sob)}</b></small></div>')
     kp = f'<div class="kpi kc"><span>CMV</span><b data-k="cmv">{brl(c)}</b><small class="orig">sistema: {brl(c)}</small></div>'
     kp += ch("l", "Loja", p, sl(p,c), "kl")
@@ -144,14 +146,14 @@ footer{{margin-top:40px;color:var(--muted);font-size:12.5px}}
  <button role="tab" id="t-resumo" aria-controls="resumo" aria-selected="false">Resumo</button>
 </div>
 <section role="tabpanel" id="fichas" aria-labelledby="t-fichas">
-<div class="note"><b>Simulador:</b> quantidade, R$/un, preço e CMV % são editáveis. Mudou o preço, o CMV % acompanha; mudou o CMV %, o preço acompanha. As mudanças ficam só na sua tela, não alteram o sistema e somem ao recarregar a página.</div>
+<div class="note"><b>Simulador:</b> quantidade, R$/un, preço, CMV % e a diferença iFood × loja são editáveis. Mudou o preço, o percentual acompanha; mudou o percentual, o preço acompanha. As mudanças ficam só na sua tela, não alteram o sistema e somem ao recarregar a página.</div>
 {"".join(cards)}
 </section>
 <section role="tabpanel" id="resumo" aria-labelledby="t-resumo" hidden>
 <div class="note"><b>Sobra</b> = o que fica por unidade depois do CMV, 8% de imposto e 4% de royalties (sobre o valor já sem imposto e sem plataforma). No iFood/99 sai também a comissão de 30%.</div>
 <div class="tw resumo"><table>
 <thead><tr class="bands"><th rowspan="2" class="pcol">Produto</th><th class="band gc gs" rowspan="2">CMV</th><th class="band gl gs" colspan="3">Loja</th><th class="band gi gs" colspan="3">iFood / 99</th></tr>
-<tr><th class="num gl gs">Preço</th><th class="num gl">CMV %</th><th class="num gl">Sobra</th><th class="num gi gs">Preço</th><th class="num gi">CMV %</th><th class="num gi">Sobra</th></tr></thead>
+<tr><th class="num gl gs">Preço</th><th class="num gl">CMV %</th><th class="num gl">Sobra</th><th class="num gi gs">Preço</th><th class="num gi">Dif. p/ loja</th><th class="num gi">Sobra</th></tr></thead>
 <tbody>{"".join(resumo)}</tbody></table></div>
 </section>
 <footer>Holy Cook · fichas do sistema em 30/10/2026. Fotos da ficha técnica da franquia.</footer>
@@ -175,11 +177,12 @@ document.querySelectorAll('article.card').forEach(card=>{{
  function calcCmv(){{cmv=0;card.querySelectorAll('tr.ing').forEach(tr=>{{const t=num(tr.querySelector('.q').value)*num(tr.querySelector('.u').value);cmv+=t;tr.querySelector('.tot').textContent=brl(t)}});
   card.querySelectorAll('[data-k="cmv"]').forEach(e=>e.textContent=brl(cmv));set('cmv',brl(cmv));}}
  function channel(ch,from){{const box=card.querySelector('[data-ch="'+ch+'"]');if(!box)return;const pi=box.querySelector('.preco'),ci=box.querySelector('.pct');
-  let p=num(pi.value);
-  if(from==='pct'){{const pc=num(ci.value);if(pc>0){{p=cmv/(pc/100);pi.value=f2(p)}}}}
-  else if(document.activeElement!==ci){{ci.value=p>0?f1(cmv/p*100):''}}
+  let p=num(pi.value);const pl=num(card.querySelector('[data-ch="l"] .preco').value);
+  const pc=v=>ch==='l'?cmv/v*100:(v-pl)/v*100;
+  if(from==='pct'){{const x=num(ci.value);if(ch==='l'?x>0:x<100){{p=ch==='l'?cmv/(x/100):pl/(1-x/100);pi.value=f2(p)}}}}
+  else if(document.activeElement!==ci){{ci.value=p>0?f1(pc(p)):''}}
   const s=p*NET[ch]-cmv;box.querySelector('.sobra').textContent=brl(s);
-  set(ch+'preco',brl(p));set(ch+'pct',p>0?f1(cmv/p*100)+'%':'—');set(ch+'sobra',brl(s));}}
+  set(ch+'preco',brl(p));set(ch+'pct',p>0?f1(pc(p))+'%':'—');set(ch+'sobra',brl(s));}}
  function mark(){{let ed=false;card.querySelectorAll('input[data-orig]').forEach(i=>{{const c=num(i.value)!==num(i.dataset.orig);i.classList.toggle('chg',c);ed=ed||c}});
   card.querySelector('.tag.ed').hidden=!ed;card.querySelector('.reset').hidden=!ed;}}
  function all(from,ch){{calcCmv();['l','i'].forEach(c=>channel(c,c===ch?from:'preco'));mark()}}
